@@ -1,0 +1,69 @@
+blockchains:
+  my-rell-dapp:
+    module: main
+    moduleArgs:
+      lib.ft4.core.admin:
+        admin_pubkey: "03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD"
+      lib.ft4.core.accounts.strategies.transfer:
+        rules:
+          - sender_blockchain: x"0000000000000000000000000000000000000000000000000000000000000000"
+            sender: "*"
+            recipient: "*"
+            asset:
+              - name: "MyTestAsset"
+                min_amount: 100L
+            timeout_days: 60
+            strategy: 
+            - "subscription"
+      lib.ft4.core.accounts.strategies.transfer.subscription:
+        asset:
+            - name: "MyTestAsset" # issued by current blockchain # OR id: x"C633343E4AA3213EA92158648F11BA8DFF606C6CAC80614CFA5F45E57367F823"
+              amount: 10L
+            # - issuing_blockchain_rid: x"99FFDC13F4675DA488F8C2229E30B05FD6C25EA6E09C30FDBBD8B44B2E9294B9"
+            #   name: "TestAsset"
+            #   amount: 10000000L
+        subscription_period_days: 30
+        # free_operations:
+        #   - foo
+        #   - bar
+compile:
+  rellVersion: 0.13.5
+database:
+  schema: schema_my_rell_dapp
+test:
+  modules:
+    - test
+  moduleArgs:
+    lib.ft4.core.admin:
+      admin_pubkey: "03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD"
+    lib.ft4.core.accounts.strategies.transfer:
+      rules:
+        - sender_blockchain: x"0000000000000000000000000000000000000000000000000000000000000000"
+          sender: "*"
+          recipient: "*"
+          asset:
+            - name: "MyTestAsset"
+              min_amount: 100L
+          timeout_days: 60
+          strategy: 
+          - "subscription"
+    lib.ft4.core.accounts.strategies.transfer.subscription:
+      asset:
+          - name: "MyTestAsset" # issued by current blockchain # OR id: x"C633343E4AA3213EA92158648F11BA8DFF606C6CAC80614CFA5F45E57367F823"
+            amount: 10L
+          # - issuing_blockchain_rid: x"99FFDC13F4675DA488F8C2229E30B05FD6C25EA6E09C30FDBBD8B44B2E9294B9"
+          #   name: "TestAsset"
+          #   amount: 10000000L
+      subscription_period_days: 30
+      # free_operations:
+      #   - foo
+      #   - bar
+libs:
+  ft4:
+    registry: https://bitbucket.org/chromawallet/ft3-lib
+    path: rell/src/lib/ft4
+    tagOrBranch: v0.7.0r
+    rid: x"F7C207AA595ABD25FDE5C2C2E32ECD3768B480AD03D1F2341548FF4F37D9B7AF"
+    insecure: false
+
+

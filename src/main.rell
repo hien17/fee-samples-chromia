@@ -1,0 +1,24 @@
+module;
+
+import lib.ft4.accounts.{ account, create_account_with_auth, single_sig_auth_descriptor };
+import lib.ft4.assets. { asset, Unsafe };
+
+// register asset; object will be initialized when the node is started. Also store reusable data
+object dapp_meta {
+    asset = Unsafe.register_asset("MyTestAsset", "MTA", 0, chain_context.blockchain_rid, "https://url-to-asset-icon");
+    strategy_name: text = "subscription";
+    sender_blockchain_rid: byte_array = x"0000000000000000000000000000000000000000000000000000000000000000";
+}
+
+operation create_user_mint_tokens(pubkey) {
+    val account = create_account_with_auth(single_sig_auth_descriptor(pubkey, set(["A", "T"])));
+    Unsafe.mint(account, dapp_meta.asset, 1000L);
+}
+
+operation transfer_tokens(sender_account: account, recipient_id: byte_array, asset, amount: big_integer) {
+  Unsafe.transfer_to_recipient_id(sender_account, recipient_id, asset, amount);
+}
+
+query get_last_account() = account @ {} ( $, @omit @sort_desc .rowid ) limit 1;
+
+query get_account_by_id(id: byte_array) = account @ { id };
