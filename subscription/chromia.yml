@@ -1,6 +1,6 @@
 blockchains:
   my-rell-dapp:
-    module: main
+    module: subscription
     moduleArgs:
       lib.ft4.core.admin:
         admin_pubkey: "03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD"

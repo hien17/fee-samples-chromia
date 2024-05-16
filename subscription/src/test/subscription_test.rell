@@ -5,7 +5,7 @@ import lib.ft4.core.accounts.strategies.transfer.{ get_pending_transfer_strategi
 import lib.ft4.core.accounts.strategies.transfer.subscription.{ ras_transfer_subscription, get_subscription_details, renew_subscription };
 import lib.ft4.external.accounts.strategies.{ register_account };
 import lib.ft4.test.utils. { create_auth_descriptor, ft_auth_operation_for };
-import ^^.main.{ create_user_mint_tokens, transfer_tokens, get_last_account, dapp_meta, get_account_by_id };
+import ^^.subscription.{ create_user_mint_tokens, transfer_tokens, get_last_account, dapp_meta, get_account_by_id };
 
 
 function test_main() {
