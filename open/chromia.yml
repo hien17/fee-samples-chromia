@@ -1,9 +1,6 @@
 blockchains:
   my-rell-dapp:
-    module: fee
-    moduleArgs:
-      lib.ft4.core.admin:
-        admin_pubkey: "03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD"
+    module: open
 compile:
   rellVersion: 0.13.5
 database:
