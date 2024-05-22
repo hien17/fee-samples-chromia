@@ -17,13 +17,8 @@ blockchains:
             - "fee"
       lib.core.accounts.strategies.transfer.fee:
         asset:
-          # - id: <asset_id_1>
-          #   amount: <amount_1>
           - name: "MyTestAsset" # issued by current blockchain
             amount: 100L
-          # - issuing_blockchain_rid: <blockchain_rid>
-          #   name: test1
-          #   amount: <amount_2>
 compile:
   rellVersion: 0.13.5
 database:
@@ -47,13 +42,8 @@ test:
           - "fee"
     lib.ft4.core.accounts.strategies.transfer.fee:
       asset:
-        # - id: <asset_id_1>
-        #   amount: <amount_1>
         - name: "MyTestAsset" # issued by current blockchain
           amount: 100L
-        # - issuing_blockchain_rid: <blockchain_rid>
-        #   name: test1
-        #   amount: <amount_2>
 libs:
   ft4:
     registry: https://bitbucket.org/chromawallet/ft3-lib

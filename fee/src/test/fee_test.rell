@@ -13,7 +13,7 @@ function test_main() {
     var fee_assets_details = get_fee_assets();
     // RESULT: [(asset_id=0x608dccb513eb2229056e41d7511a1984087cbabafb5bab23c19a307e60a93e86,amount=100)]
 
-    // Create test users
+    // Create test users keypairs
     val alice = rell.test.keypairs.alice;
     val trudy = rell.test.keypairs.trudy;
 

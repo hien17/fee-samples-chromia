@@ -5,11 +5,11 @@ import lib.ft4.core.accounts.strategies.transfer.{ get_pending_transfer_strategi
 import lib.ft4.core.accounts.strategies.transfer.subscription.{ ras_transfer_subscription, get_subscription_details, renew_subscription };
 import lib.ft4.external.accounts.strategies.{ register_account };
 import lib.ft4.test.utils. { create_auth_descriptor, ft_auth_operation_for };
-import ^^.subscription.{ create_user_mint_tokens, transfer_tokens, get_last_account, dapp_meta, get_account_by_id };
+import ^^.subscription.{ create_user_mint_tokens, transfer_tokens, get_last_account, dapp_meta, get_account_by_id, create_message };
 
 
 function test_main() {
-    // Create test users
+    // Create test users keypairs
     val alice = rell.test.keypairs.alice;
     val trudy = rell.test.keypairs.trudy;
 
@@ -40,7 +40,7 @@ function test_main() {
     );
     // RESULT: true
 
-    // Create auth descriptor; Use subscription operation to pass account details to the register_account function. Is because we have better type checking and malformed (GTV encoded) parameters will be detected by Rell even before operation is invoked; And now egister account
+    // Create auth descriptor; Use subscription operation to pass account details to the register_account function. Is because we have better type checking and malformed (GTV encoded) parameters will be detected by Rell even before operation is invoked; And now register account
     val auth_descriptor = create_auth_descriptor(trudy.pub, ["A", "T"], null.to_gtv());
     rell.test.tx()
         .op(ras_transfer_subscription(dapp_meta.asset.id, auth_descriptor, null))
@@ -69,4 +69,10 @@ function test_main() {
     // Check last paymeyment again
     subscription_details = get_subscription_details(trudy.pub.hash());
     // RESULT: (asset_id=0x608dccb513eb2229056e41d7511a1984087cbabafb5bab23c19a307e60a93e86,period_millis=5183990000,last_payment=1577836820000)
+
+    // Free operation that can be called even if subscription has expired
+    rell.test.tx()
+        .op(ft_auth_operation_for(trudy.pub))
+        .op(create_message("Hello World!")).sign(trudy)
+        .run();
 }
