@@ -21,7 +21,7 @@ blockchains:
               amount: 10L
         subscription_period_days: 30
         free_operations:
-          - create_message
+          - some_free_operation
 compile:
   rellVersion: 0.13.5
 database:
@@ -49,7 +49,7 @@ test:
             amount: 10L
       subscription_period_days: 30
       free_operations:
-        - create_message
+        - some_free_operation
 libs:
   ft4:
     registry: https://bitbucket.org/chromawallet/ft3-lib

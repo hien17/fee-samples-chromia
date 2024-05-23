@@ -4,7 +4,7 @@ This repository contains code demonstrating how to use one of the paid account c
 
 ## Steps for Setting Up Subscription and Account Registration
 
-1. Configure Cromia.yaml
+1. Configure Chromia.yaml
    
 2. Create an asset.
 
