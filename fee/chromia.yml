@@ -1,0 +1,53 @@
+blockchains:
+  my-rell-dapp:
+    module: fee
+    moduleArgs:
+      lib.ft4.core.admin:
+        admin_pubkey: "03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD"
+      lib.ft4.core.accounts.strategies.transfer:
+        rules:
+          - sender_blockchain: x"0000000000000000000000000000000000000000000000000000000000000000"
+            sender: "*"
+            recipient: "*"
+            asset:
+              - name: "MyTestAsset"
+                min_amount: 100L
+            timeout_days: 60
+            strategy: 
+            - "fee"
+      lib.core.accounts.strategies.transfer.fee:
+        asset:
+          - name: "MyTestAsset" # issued by current blockchain
+            amount: 100L
+compile:
+  rellVersion: 0.13.5
+database:
+  schema: schema_my_rell_dapp
+test:
+  modules:
+    - test
+  moduleArgs:
+    lib.ft4.core.admin:
+      admin_pubkey: "03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD"
+    lib.ft4.core.accounts.strategies.transfer:
+      rules:
+        - sender_blockchain: x"0000000000000000000000000000000000000000000000000000000000000000"
+          sender: "*"
+          recipient: "*"
+          asset:
+            - name: "MyTestAsset"
+              min_amount: 100L
+          timeout_days: 60
+          strategy: 
+          - "fee"
+    lib.ft4.core.accounts.strategies.transfer.fee:
+      asset:
+        - name: "MyTestAsset" # issued by current blockchain
+          amount: 100L
+libs:
+  ft4:
+    registry: https://bitbucket.org/chromawallet/ft3-lib
+    path: rell/src/lib/ft4
+    tagOrBranch: v0.7.0r
+    rid: x"F7C207AA595ABD25FDE5C2C2E32ECD3768B480AD03D1F2341548FF4F37D9B7AF"
+    insecure: false
