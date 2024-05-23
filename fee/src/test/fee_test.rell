@@ -1,0 +1,58 @@
+@test module;
+
+import lib.ft4.assets. { get_asset_balance };
+import lib.ft4.core.accounts.strategies.transfer.{ get_pending_transfer_strategies, has_pending_create_account_transfer_for_strategy };
+import lib.ft4.core.accounts.strategies.transfer.fee.{ ras_transfer_fee, get_fee_assets };
+import lib.ft4.external.accounts.strategies.{ register_account };
+import lib.ft4.test.utils. { create_auth_descriptor };
+import ^^.fee.{ create_user_mint_tokens, transfer_tokens, get_last_account, dapp_meta, get_account_by_id };
+
+
+function test_main() {
+    // Checking fee details
+    var fee_assets_details = get_fee_assets();
+    // RESULT: [(asset_id=0x608dccb513eb2229056e41d7511a1984087cbabafb5bab23c19a307e60a93e86,amount=100)]
+
+    // Create test users keypairs
+    val alice = rell.test.keypairs.alice;
+    val trudy = rell.test.keypairs.trudy;
+
+    // Create account for Alice and mint 1000 tokens on this account
+    rell.test.tx()
+        .op(create_user_mint_tokens(alice.pub)).sign(alice)
+        .run();
+
+    var alice_account = get_last_account();
+
+    // Transfer assets to a non-existent account
+    rell.test.tx()
+        .op(transfer_tokens(alice_account, trudy.pub.hash(), dapp_meta.asset, 200L))
+        .run();
+
+    // Check if any pending transfer strategies 
+    val strategies_names = get_pending_transfer_strategies(trudy.pub.hash());
+    // RESULT: [fee]
+
+    // Checks if there is at least one pending transfer for account creation based on a fee strategy.
+    val pending_create_account_status = has_pending_create_account_transfer_for_strategy(
+        strategy_name = dapp_meta.strategy_name,  
+        sender_blockchain_rid = dapp_meta.sender_blockchain_rid,
+        sender_id = alice_account.id,
+        recipient_id = trudy.pub.hash(),
+        asset_id = dapp_meta.asset.id,
+        amount = 100L
+    );
+    // RESULT: true
+
+    // Create auth descriptor; Use fee operation to pass account details to the register_account function. Is because we have better type checking and malformed (GTV encoded) parameters will be detected by Rell even before operation is invoked; And now register account
+    val auth_descriptor = create_auth_descriptor(trudy.pub, ["A", "T"], null.to_gtv());
+    rell.test.tx()
+        .op(ras_transfer_fee(dapp_meta.asset.id, auth_descriptor, null))
+        .op(register_account()).sign(trudy)
+        .run();
+
+    // Check balance 
+    val trudy_account = get_account_by_id(trudy.pub.hash());
+    var trudy_balance = get_asset_balance(trudy_account, dapp_meta.asset);
+    // RESULT: 100
+}

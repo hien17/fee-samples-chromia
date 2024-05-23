@@ -1,0 +1,18 @@
+@test module;
+
+import lib.ft4.core.accounts.strategies.open.{ ras_open };
+import lib.ft4.external.accounts.strategies.{ register_account };
+import lib.ft4.test.utils. { create_auth_descriptor };
+
+
+function test_main() {
+    // Create test user keypair
+    val alice = rell.test.keypairs.alice;
+
+    // Create auth descriptor; Use open operation to pass account details to the register_account function. Is because we have better type checking and malformed (GTV encoded) parameters will be detected by Rell even before operation is invoked; And now register account
+    val auth_descriptor = create_auth_descriptor(alice.pub, ["A", "T"], null.to_gtv());
+    rell.test.tx()
+        .op(ras_open(auth_descriptor))
+        .op(register_account()).sign(alice)
+        .run();
+}

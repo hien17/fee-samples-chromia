@@ -9,7 +9,7 @@ import ^^.subscription.{ create_user_mint_tokens, transfer_tokens, get_last_acco
 
 
 function test_main() {
-    // Create test users
+    // Create test users keypairs
     val alice = rell.test.keypairs.alice;
     val trudy = rell.test.keypairs.trudy;
 
@@ -40,7 +40,7 @@ function test_main() {
     );
     // RESULT: true
 
-    // Create auth descriptor; Use subscription operation to pass account details to the register_account function. Is because we have better type checking and malformed (GTV encoded) parameters will be detected by Rell even before operation is invoked; And now egister account
+    // Create auth descriptor; Use subscription operation to pass account details to the register_account function. Is because we have better type checking and malformed (GTV encoded) parameters will be detected by Rell even before operation is invoked; And now register account
     val auth_descriptor = create_auth_descriptor(trudy.pub, ["A", "T"], null.to_gtv());
     rell.test.tx()
         .op(ras_transfer_subscription(dapp_meta.asset.id, auth_descriptor, null))

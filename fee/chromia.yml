@@ -1,6 +1,6 @@
 blockchains:
   my-rell-dapp:
-    module: subscription
+    module: fee
     moduleArgs:
       lib.ft4.core.admin:
         admin_pubkey: "03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD"
@@ -14,14 +14,11 @@ blockchains:
                 min_amount: 100L
             timeout_days: 60
             strategy: 
-            - "subscription"
-      lib.ft4.core.accounts.strategies.transfer.subscription:
+            - "fee"
+      lib.core.accounts.strategies.transfer.fee:
         asset:
-            - name: "MyTestAsset" # issued by current blockchain
-              amount: 10L
-        subscription_period_days: 30
-        free_operations:
-          - some_free_operation
+          - name: "MyTestAsset" # issued by current blockchain
+            amount: 100L
 compile:
   rellVersion: 0.13.5
 database:
@@ -42,14 +39,11 @@ test:
               min_amount: 100L
           timeout_days: 60
           strategy: 
-          - "subscription"
-    lib.ft4.core.accounts.strategies.transfer.subscription:
+          - "fee"
+    lib.ft4.core.accounts.strategies.transfer.fee:
       asset:
-          - name: "MyTestAsset" # issued by current blockchain
-            amount: 10L
-      subscription_period_days: 30
-      free_operations:
-        - some_free_operation
+        - name: "MyTestAsset" # issued by current blockchain
+          amount: 100L
 libs:
   ft4:
     registry: https://bitbucket.org/chromawallet/ft3-lib
@@ -57,5 +51,3 @@ libs:
     tagOrBranch: v0.7.0r
     rid: x"F7C207AA595ABD25FDE5C2C2E32ECD3768B480AD03D1F2341548FF4F37D9B7AF"
     insecure: false
-
-
