@@ -1,5 +1,5 @@
 blockchains:
-  my_rell_dapp_test_3:
+  my_rell_dapp_test_4:
     module: subscription
     moduleArgs:
       lib.ft4.core.admin:
@@ -66,6 +66,7 @@ deployments:
       my_rell_dapp_test_1: x"13E3589536325FE0434759C878650D57869941E5C61D114218669A2F60062450"
       my_rell_dapp_test_2: x"7C944394448634DC4F0C049C158070C0D68C569F685D39F335A7D23395D4FAF0"
       my_rell_dapp_test_3: x"840B208BD2B1BC04C66F70D730DEF676F2D93A9565EB21442CE8DBDD4ECB11CF"
+      my_rell_dapp_test_4: x"C76538F93FD1ECC72DE082F817023B8336A51DEE6D48023B5BBD302DAD49936D"
 
 
 

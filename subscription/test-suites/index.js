@@ -6,22 +6,22 @@ const alicePubkey = Buffer.from("025B4C63A26BFF65E922693EDA2F13EE67E85CD4D4B5F8C
 const alicePrivkey = Buffer.from("77FEFD5C7E49E16A1744001F0838D4CF191A66BD9A5F45FDD36CC9120440100A", "hex");
 const aliceKeyPair = { pubKey: alicePubkey, privKey: alicePrivkey };
 
-console.log("aliceKeyPair", aliceKeyPair);
+// console.log("aliceKeyPair", aliceKeyPair);
 
 const trudyPubkey = Buffer.from("032E524E37357AE1D1F296900BC761DC044C15FD7E037840D5FB9DF7AF9550AC56", "hex");
 const trudyPrivkey = Buffer.from("0579695EAE57192B5A4C848E31183A7F875BEFC53D7184126DA8C19BE5A2A7D3", "hex");
 const trudyKeyPair = { pubKey: trudyPubkey, privKey: trudyPrivkey };
 
-console.log("trudyKeyPair", trudyKeyPair);
+// console.log("trudyKeyPair", trudyKeyPair);
 
 const trudyKeyPairStore = createInMemoryFtKeyStore(trudyKeyPair);
 const aliceKeyPairStore = createInMemoryFtKeyStore(aliceKeyPair);
 // Connection setup
 const directoryNodeUrl = "https://node0.testnet.chromia.com:7740";
-const blockchainRid = "840B208BD2B1BC04C66F70D730DEF676F2D93A9565EB21442CE8DBDD4ECB11CF";
+const blockchainRid = "C76538F93FD1ECC72DE082F817023B8336A51DEE6D48023B5BBD302DAD49936D";
 
 // Update token ids
-const MTA = '2265161B620BE46D4DA56EB1F1A7A7C14907507501E5A58C7625DB7985E8964F'
+const MTA = '9DC42D47E5213BC9AEB963952D54C879D3E66949F74798002FFB8425783B9CC8'
 // You can keep other assets if needed, but MTA is the one we'll use
 const assets = [MTA]
 
@@ -36,23 +36,39 @@ async function subscriptionNotesTest() {
   const client = connection.client;
   try {
     console.log("\n=== Starting Subscription Notes Test ===");
-    
-    // // 1. Get Alice's account (assume it exists with ID 2)
-    // const aliceId = 2;
-    // console.log(`Using Alice's account ID: ${aliceId}`);
-    
-    // // 2. Get asset details
-    // const assetId = 1; // Numeric asset ID for transfer_tokens
-    // const assetIdHex = CHR; // Hex asset ID for other operations
-    // console.log(`Using asset ID: ${assetId} (${assetIdHex})`);
-    
+
+    const aliceKeyPairProvider = pcl.newSignatureProvider(aliceKeyPair)
+
+    // // 1. Create user & mint tokens
+    // await client.signAndSendUniqueTransaction(
+    //   {
+    //     name: "create_user_mint_tokens",
+    //     args: [alicePubkey]
+    //   },
+    //   aliceKeyPairProvider
+    // );
+
+    // 2. Get last account (alice)
+    const aliceAccount = await client.query("get_last_account", {});
+    console.log("aliceAccount", aliceAccount);
+
+    // 3. Transfer tokens from Alice to non-existent Trudy account
+    await client.signAndSendUniqueTransaction(
+      {
+        name: "transfer_tokens",
+        args: [aliceAccount, trudyPubkey, 1, BigInt(100)]
+      },
+      aliceKeyPairProvider
+    );
+
+
     // // 3. Transfer tokens from Alice to non-existent Trudy account
-    const trudyIdHex = "21ea4a7dcb14c278edb957e2927965f8bbfc9ae73c51873a19e73ac19ad56501";
-    const trudyId = Buffer.from(trudyIdHex, "hex");
-    const aliceIdHex = "1a48a63faa032a2ce18cc706dbbb86f16df8da4c35dcaaea8715cd19e97ecd0a";
-    const aliceId = Buffer.from(aliceIdHex, "hex");
-    const amount = 100;
-    console.log("trudyId", trudyId);
+    // const trudyIdHex = "21ea4a7dcb14c278edb957e2927965f8bbfc9ae73c51873a19e73ac19ad56501";
+    // const trudyId = Buffer.from(trudyIdHex, "hex");
+    // const aliceIdHex = "1a48a63faa032a2ce18cc706dbbb86f16df8da4c35dcaaea8715cd19e97ecd0a";
+    // const aliceId = Buffer.from(aliceIdHex, "hex");
+    // const amount = 100;
+    // console.log("trudyId", trudyId);
     
     // console.log(`\n=== Transferring ${amount} tokens from Alice (ID: ${aliceId}) to Trudy (ID: ${trudyIdHex}) ===`);
     // const transferResult = await transferToNonExistentAccount(client, aliceId, trudyId, assetId, amount);
@@ -62,25 +78,30 @@ async function subscriptionNotesTest() {
     // }
     
     // 4. Check pending transfer strategies using the direct query
-    console.log("\n=== Checking Pending Transfer Strategies ===");
-    const strategies = await getPendingTransferStrategiesDirectQuery(client, trudyId);
+    // console.log("\n=== Checking Pending Transfer Strategies ===");
+    // const strategies = await getPendingTransferStrategiesDirectQuery(client, trudyId);
     
-    if (strategies && strategies.length > 0) {
-      console.log("Available strategies:", strategies);
-    } else {
-      console.log("No strategies found. This might be expected depending on the transfer status.");
-    }
+    // if (strategies && strategies.length > 0) {
+    //   console.log("Available strategies:", strategies);
+    // } else {
+    //   console.log("No strategies found. This might be expected depending on the transfer status.");
+    // }
 
-    const isPending = await hasPendingCreateAccountTransferForStrategy(client, aliceId, trudyId);
-    console.log("isPending", isPending);
+    // const isPending = await hasPendingCreateAccountTransferForStrategy(client, aliceId, trudyId);
+    // console.log("isPending", isPending);
     
-    // 5. Create and connect Trudy's session
-    console.log("\n=== Setting up Trudy's Session ===");
-    const { getSession } = createKeyStoreInteractor(client, trudyKeyPairStore);
+    // // 5. Create and connect Trudy's session
+    // console.log("\n=== Setting up Trudy's Session ===");
+    // const trudyKeyStore = createInMemoryFtKeyStore(trudyKeyPair);
+    // const authDescriptor = createSingleSigAuthDescriptorRegistration(["A", "T"], trudyKeyStore.id, null);
+
+    // // Create a session for the sender account
+    // const { getSession } = createKeyStoreInteractor(client, createInMemoryFtKeyStore(trudyKeyPair));
+    // const trudySession = await getSession(trudyId);
     
-    // 6. Register Trudy's account using subscription strategy
+    // // 6. Register Trudy's account using subscription strategy
     // console.log("\n=== Registering Trudy's Account with Subscription Strategy ===");
-    // await registerAccountWithSubscription(client, trudyKeyPair, assetIdHex);
+    // await registerAccountWithSubscription(trudySession, authDescriptor, assetId);
     
     // // 7. Wait a moment for account registration to complete
     // console.log("Waiting for account registration to complete...");
@@ -114,6 +135,22 @@ async function subscriptionNotesTest() {
     console.error("Error in main function:", error);
   }
 }
+
+// Function to create user mint tokens
+async function createUserMintTokens(session, userPubkey) {
+  const txResult = await session
+    .transactionBuilder()
+    .add({
+      name: "create_user_mint_tokens",
+      args: [userPubkey]
+    })
+    .buildAndSend();
+
+  console.log("Create user & mint tokens successful!");
+  console.log("Transaction ID:", formatTransactionId(txResult.receipt.transactionRid));
+  return txResult;
+}
+
 
 // Function to transfer tokens to a non-existent account
 async function transferToNonExistentAccount(client, senderAccountId, recipientId, assetId, amount) {
@@ -185,38 +222,32 @@ async function hasPendingCreateAccountTransferForStrategy(client, senderId, reci
 }
 
 // Function to register account using subscription strategy
-async function registerAccountWithSubscription(client, keyPair, assetIdHex) {
+async function registerAccountWithSubscription(session, authDescriptor, assetId) {
   try {
     // First attempt the RAS transfer subscription
-    const rasResult = await client
-      .transaction()
+    const rasResult = await session
+      .transactionBuilder()
       .add({
         name: "ft4.ras_transfer_subscription",
         args: [
-          Buffer.from(assetIdHex, 'hex'),
-          [{ // auth descriptor as an array
-            pubkey: keyPair.pubKey,
-            permissions: ["A", "T"],
-            delegate: null
-          }],
+          assetId,
+          authDescriptor,
           null
         ]
       })
-      .sign({ pubKey: keyPair.pubKey, privKey: keyPair.privKey })
-      .post();
+      .buildAndSend();
     
     console.log("RAS Transfer Subscription successful!");
     console.log("Transaction ID:", formatTransactionId(rasResult.receipt.transactionRid));
     
     // Then register the account
-    const registerResult = await client
-      .transaction()
+    const registerResult = await session
+      .transactionBuilder()
       .add({
         name: "ft4.register_account",
         args: []
       })
-      .sign({ pubKey: keyPair.pubKey, privKey: keyPair.privKey })
-      .post();
+      .buildAndSend();
     
     console.log("Account Registration successful!");
     console.log("Transaction ID:", formatTransactionId(registerResult.receipt.transactionRid));

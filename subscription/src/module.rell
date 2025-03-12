@@ -4,3 +4,9 @@ import lib.ft4.auth;
 import lib.ft4.accounts.strategies.transfer.subscription;
 import lib.ft4.accounts.{ account, create_account_with_auth, single_sig_auth_descriptor };
 import lib.ft4.assets.{ asset, Unsafe };
+import lib.ft4.auth;
+
+@extend(auth.auth_handler)
+function () = auth.add_auth_handler(
+    flags = ["A", "T"]
+);

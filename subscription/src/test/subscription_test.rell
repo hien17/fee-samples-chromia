@@ -25,6 +25,11 @@ function test_main() {
         .op(transfer_tokens(alice_account, trudy.pub.hash(), dapp_meta.asset, 100L))
         .run();
 
+    // log alice_account and trudy.pub.hash()
+    print("alice_account", alice_account);
+    print("alice_account.id", alice_account.id);
+    print("trudy.pub.hash()", trudy.pub.hash());
+
     // Check if any pending transfer strategies 
     val strategies_names = get_pending_transfer_strategies(trudy.pub.hash());
     // RESULT: [subscription]
