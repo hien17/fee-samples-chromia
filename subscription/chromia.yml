@@ -1,12 +1,12 @@
 blockchains:
-  my-rell-dapp:
+  my_rell_dapp_test_3:
     module: subscription
     moduleArgs:
       lib.ft4.core.admin:
-        admin_pubkey: "03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD"
+        admin_pubkey: "03A9043736EF943B5232900E2904E247B15F938494FB6C148F2D253AFABA59B58A"
       lib.ft4.core.accounts.strategies.transfer:
         rules:
-          - sender_blockchain: x"0000000000000000000000000000000000000000000000000000000000000000"
+          - sender_blockchain: "*"
             sender: "*"
             recipient: "*"
             asset:
@@ -52,10 +52,20 @@ test:
         - some_free_operation
 libs:
   ft4:
-    registry: https://bitbucket.org/chromawallet/ft3-lib
+    registry: https://gitlab.com/chromaway/ft4-lib.git
     path: rell/src/lib/ft4
-    tagOrBranch: v0.7.0r
-    rid: x"F7C207AA595ABD25FDE5C2C2E32ECD3768B480AD03D1F2341548FF4F37D9B7AF"
+    tagOrBranch: v1.0.0r
+    rid: x"FA487D75E63B6B58381F8D71E0700E69BEDEAD3A57D1E6C1A9ABB149FAC9E65F"
     insecure: false
+deployments:
+  testnet: # Deployment Target name
+    brid: x"6F1B061C633A992BF195850BF5AA1B6F887AEE01BB3F51251C230930FB792A92" # Blockchain RID for Testnet Directory Chain
+    url: https://node0.testnet.chromia.com:7740 # Target URL for one of the nodes in Testnet
+    container: 2e5e0846d4cc5908f22d76bb78c0d91c4a8fba1bccafffbb8607b265055d6a8a
+    chains:
+      my_rell_dapp_test_1: x"13E3589536325FE0434759C878650D57869941E5C61D114218669A2F60062450"
+      my_rell_dapp_test_2: x"7C944394448634DC4F0C049C158070C0D68C569F685D39F335A7D23395D4FAF0"
+      my_rell_dapp_test_3: x"840B208BD2B1BC04C66F70D730DEF676F2D93A9565EB21442CE8DBDD4ECB11CF"
+
 
 

@@ -1,0 +1,5 @@
+operation register_account() {
+    // This should use the subscription strategy
+    // It will register an account for the signer of the transaction
+    // The code for this likely already exists in your subscription example
+}

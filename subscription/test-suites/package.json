@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@chromia/ft4": "^1.0.1",
+    "postchain-client": "^1.21.0"
+  },
+  "type": "module"
+}

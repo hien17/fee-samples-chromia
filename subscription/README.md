@@ -24,4 +24,39 @@ This repository contains code demonstrating how to use one of the paid account c
 | Has Pending Create Account Transfer for Strategy | `chr query ft4.has_pending_create_account_transfer_for_strategy strategy_name=subscription sender_blockchain_rid=03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD sender_id=5E2488889F72939DD4D0A034FB91893ACBF14C7EDBCEF2A9F5C621A07169EAD2 recipient_id=7CD90DBE3D3A9C74D45671FA5FD30B8A7C367F7227B32F1F8A0021E656FFB9C4 asset_id=99FFDC13F4675DA488F8C2229E30B05FD6C25EA6E09C30FDBBD8B44B2E9294B9 amount=10000000L` | `strategy_name=subscription`: The name of the strategy<br>`sender_blockchain_rid=03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD`: The sender's blockchain RID<br>`sender_id=5E2488889F72939DD4D0A034FB91893ACBF14C7EDBCEF2A9F5C621A07169EAD2`: The sender's ID<br>`recipient_id=7CD90DBE3D3A9C74D45671FA5FD30B8A7C367F7227B32F1F8A0021E656FFB9C4`: The recipient's ID<br>`asset_id=99FFDC13F4675DA488F8C2229E30B05FD6C25EA6E09C30FDBBD8B44B2E9294B9`: The asset ID<br>`amount=10000000L`: The amount to transfer |
 | Get Subscription Details                      | `chr query ft4.get_subscription_details account_id=sender_blockchain_rid=03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD`                                                             | `account_id=sender_blockchain_rid=03C8D12D9D3DD97DA5A20A569DA5E25E81C9C8DB44BBDB1BE798D9F1B695420BBD`: The sender's blockchain |
 
+## Deployment
 
+```shell
+chr deployment create --settings chromia.yml --network testnet --blockchain my_rell_dapp_test_1
+This will create a new deployment of my_rell_dapp_test_1 on network testnet. Would you like to create a new deployment? [y/N]: y
+Deployment of blockchain my_rell_dapp_test_1 was successful
+Add the following to your project settings file:
+deployments:
+  testnet:
+    chains:
+      my_rell_dapp_test_1: x"13E3589536325FE0434759C878650D57869941E5C61D114218669A2F60062450"
+```
+
+```shell
+chr keygen --dry 
+mnemonic:  solar into blind ignore valve knife electric manage panther universe scene zone afraid segment private undo brain real aunt march require awful agree end 
+pubkey:    025B4C63A26BFF65E922693EDA2F13EE67E85CD4D4B5F8CEB2F5DC1E399FC6F245
+privkey:   77FEFD5C7E49E16A1744001F0838D4CF191A66BD9A5F45FDD36CC9120440100A
+
+chr keygen --dry
+mnemonic:  banana snap only soon club cheese knee pigeon wheat design zone display jealous draw add garlic enough couch paddle march sad win dismiss venue 
+pubkey:    032E524E37357AE1D1F296900BC761DC044C15FD7E037840D5FB9DF7AF9550AC56
+privkey:   0579695EAE57192B5A4C848E31183A7F875BEFC53D7184126DA8C19BE5A2A7D3
+
+hienhoangminh@Hiens-MacBook-Air-6 subscription % chr tx create_user_mint_tokens 025B4C63A26BFF65E922693EDA2F13EE67E85CD4D4B5F8CEB2F5DC1E399FC6F245 --await --secret testnet_container_key.key --network testnet --blockchain my_rell_dapp_test_3
+transaction with rid CAE955BB4D7F8902612981BF07FE38C6D34509B52CD6CCFDC78D0C058DF28A70 was posted CONFIRMED
+
+hienhoangminh@Hiens-MacBook-Air-6 subscription % chr query get_last_account --network testnet --blockchain my_rell_dapp_test_2
+2
+
+hienhoangminh@Hiens-MacBook-Air-6 subscription % echo 032E524E37357AE1D1F296900BC761DC044C15FD7E037840D5FB9DF7AF9550AC56 | xxd -r -p | shasum -a 256
+21ea4a7dcb14c278edb957e2927965f8bbfc9ae73c51873a19e73ac19ad56501  -
+
+
+hienhoangminh@Hiens-MacBook-Air-6 subscription % chr tx transfer_tokens 2 x\"21ea4a7dcb14c278edb957e2927965f8bbfc9ae73c51873a19e73ac19ad56501\" 1 100L --await --secret testnet_container_key.key --network testnet --blockchain my_rell_dapp_test_3
+transaction with rid BCFD9565CA58A041F35E0C154535117EE3D6C6D15BA8A4B35D34AC2A7A5ABB08 was posted CONFIRMED
